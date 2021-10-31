@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">VIA Events</string>
+    <string name="test_string">I am a test string!</string>
+</resources>
