@@ -1,4 +1,25 @@
 <resources>
     <string name="app_name">VIA Events</string>
     <string name="test_string">I am a test string!</string>
+
+    <!-- Menu -->
+    <string name="search">Search</string>
+    <string name="more">More</string>
+
+    <!-- AuthActivity -->
+    <string name="tab_login">Login</string>
+    <string name="tab_sign_up">Sign up</string>
+
+    <!-- LoginFragment & SignUpFragment -->
+    <string name="text_login">Login</string>
+    <string name="text_sign_up">Sign up</string>
+    <string name="text_username">VIA ID</string>
+    <string name="text_password">Password</string>
+    <string name="text_login_help">To create an Account, please click the tab at the bottom.</string>
+    <string name="text_name">Name</string>
+    <string name="text_password_repeat">Password (repeat)</string>
+    <string name="text_description">Description</string>
+
+    <!-- EventsActivity -->
+    <string name="fab_event">Add new event</string>
 </resources>
