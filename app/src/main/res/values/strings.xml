@@ -21,5 +21,6 @@
     <string name="text_description">Description</string>
 
     <!-- EventsActivity -->
+    <string name="events_title">List of Events</string>
     <string name="fab_event">Add new event</string>
 </resources>
