@@ -16,10 +16,7 @@
             android:name=".CreateEventActivity"
             android:exported="false" />
         <activity
-            android:name=".EventsActivity"
-            android:exported="false" />
-        <activity
-            android:name=".AuthActivity"
+            android:name=".MainActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -27,6 +24,9 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity
+            android:name=".AuthActivity"
+            android:exported="false" />
     </application>
 
 </manifest>

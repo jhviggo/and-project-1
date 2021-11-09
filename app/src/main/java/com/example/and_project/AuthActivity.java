@@ -3,19 +3,70 @@ package com.example.and_project;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
+import androidx.lifecycle.ViewModelProvider;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
+import android.widget.TextView;
+import android.widget.Toast;
 
+import com.example.and_project.data.UserViewModel;
 import com.google.android.material.tabs.TabLayout;
 
+import java.util.regex.Pattern;
+
 public class AuthActivity extends AppCompatActivity {
+    private UserViewModel viewModel;
+    private Pattern emailPattern;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_auth);
+        emailPattern = Pattern.compile("\\d*@via.dk");
+        viewModel = new ViewModelProvider(this).get(UserViewModel.class);
+        checkIfSignedIn();
+        setupFrabmentTab();
+    }
+
+    public void signIn(View view) {
+        String email = "vig56@hotmail.com";
+        String password = "test12345";
+        viewModel.signIn(email, password).addOnCompleteListener(task -> {
+                    if (!task.isSuccessful())
+                        Toast.makeText(this, "Unable to sign in", Toast.LENGTH_SHORT).show();
+                });
+    }
+
+    public void signUp(View view) {
+        TextView tvUsername = findViewById(R.id.signUpUsername);
+        TextView tvPassword = findViewById(R.id.signUpPassword);
+        TextView tvPasswordRepeat = findViewById(R.id.signUpPasswordRepeat);
+
+        if (!emailPattern.matcher(tvUsername.getText()).matches()) {
+            Toast.makeText(this, "Please use a @via.dk mail", Toast.LENGTH_SHORT).show();
+        }
+
+        if (!tvPassword.equals(tvPasswordRepeat)) {
+            Toast.makeText(this, "Passwords do not match", Toast.LENGTH_SHORT).show();
+        }
+        viewModel.signUp("vig56@hotmail.com", "test12345").addOnCompleteListener(task -> {
+            if (!task.isSuccessful())
+                Toast.makeText(this, "Unable to sign up", Toast.LENGTH_SHORT).show();
+        });
+    }
+
+    private void checkIfSignedIn() {
+        viewModel.getCurrentUser().observe(this, user -> {
+            if (user != null) {
+                startActivity(new Intent(this, MainActivity.class));
+                finish();
+            }
+        });
+    }
+
+    private void setupFrabmentTab() {
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         transaction.replace(R.id.container, new LoginFragment()).commit();
 
@@ -33,14 +84,5 @@ public class AuthActivity extends AppCompatActivity {
             @Override
             public void onTabReselected(TabLayout.Tab tab) {}
         });
-    }
-
-    public void login(View view) {
-        Log.v("auth", "login");
-        startActivity(new Intent(this, EventsActivity.class));
-    }
-
-    public void signUp(View view) {
-        Log.v("auth", "sign up");
     }
 }

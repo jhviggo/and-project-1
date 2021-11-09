@@ -1,26 +1,30 @@
 package com.example.and_project;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.Toast;
+
+import com.example.and_project.data.UserViewModel;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 import java.util.ArrayList;
 
-public class EventsActivity extends AppCompatActivity implements EventAdapter.OnListItemClickListener {
+public class MainActivity extends AppCompatActivity implements EventAdapter.OnListItemClickListener {
     private RecyclerView rvEventsList;
     private EventAdapter adapter;
     private ArrayList<Event> events;
+    private FirebaseAuth mAuth;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_events);
-
         rvEventsList = findViewById(R.id.rvEvents);
         rvEventsList.setLayoutManager(new LinearLayoutManager(this));
         // For hard-coded data only
@@ -29,8 +33,23 @@ public class EventsActivity extends AppCompatActivity implements EventAdapter.On
         rvEventsList.setAdapter(adapter);
     }
 
+    @Override
+    protected void onStart() {
+        super.onStart();
+        mAuth = FirebaseAuth.getInstance();
+        FirebaseUser currentUser = mAuth.getCurrentUser();
+        if(currentUser == null){
+            goToLogin();
+        }
+    }
+
     public void addNewEvent(View view) {
         startActivity(new Intent(this, CreateEventActivity.class));
+    }
+
+    private void goToLogin() {
+        startActivity(new Intent(this, AuthActivity.class));
+        finish();
     }
 
     private void SetStaticEvents() {

@@ -19,7 +19,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"/>
         <EditText
-            android:id="@+id/username"
+            android:id="@+id/signUpUsername"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="@string/text_username"
@@ -30,35 +30,35 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="@string/text_name"
-            app:layout_constraintTop_toBottomOf="@+id/username"
+            app:layout_constraintTop_toBottomOf="@+id/signUpUsername"
             android:inputType="text"/>
         <EditText
-            android:id="@+id/password"
+            android:id="@+id/signUpPassword"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="@string/text_password"
             app:layout_constraintTop_toBottomOf="@+id/name"
             android:inputType="textPassword"/>
         <EditText
-            android:id="@+id/passwordRepeat"
+            android:id="@+id/signUpPasswordRepeat"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="@string/text_password_repeat"
-            app:layout_constraintTop_toBottomOf="@+id/password"
+            app:layout_constraintTop_toBottomOf="@+id/signUpPassword"
             android:inputType="text"/>
         <EditText
-            android:id="@+id/description"
+            android:id="@+id/signUpDescription"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="@string/text_description"
             android:maxLength="500"
             android:lines="3"
-            app:layout_constraintTop_toBottomOf="@+id/passwordRepeat"
+            app:layout_constraintTop_toBottomOf="@+id/signUpPasswordRepeat"
             android:inputType="textMultiLine"/>
         <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:layout_constraintTop_toBottomOf="@+id/description"
+            app:layout_constraintTop_toBottomOf="@+id/signUpDescription"
             android:layout_marginTop="50dp"
             app:layout_constraintLeft_toLeftOf="parent"
             android:onClick="signUp"
