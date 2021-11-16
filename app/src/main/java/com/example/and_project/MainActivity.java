@@ -7,9 +7,10 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 
-import com.example.and_project.data.UserViewModel;
+import com.example.and_project.data.Event;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
@@ -20,17 +21,23 @@ public class MainActivity extends AppCompatActivity implements EventAdapter.OnLi
     private EventAdapter adapter;
     private ArrayList<Event> events;
     private FirebaseAuth mAuth;
+    private EventsViewModel eventsViewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_events);
         rvEventsList = findViewById(R.id.rvEvents);
+        events = new ArrayList<>();
         rvEventsList.setLayoutManager(new LinearLayoutManager(this));
-        // For hard-coded data only
-        this.SetStaticEvents();
         adapter = new EventAdapter(events, this);
         rvEventsList.setAdapter(adapter);
+        eventsViewModel = new ViewModelProvider(this).get(EventsViewModel.class);
+
+        eventsViewModel.getEvents().observe(this, values -> {
+            events.add(values.get(0));
+            adapter.notifyDataSetChanged();
+        });
     }
 
     @Override
@@ -50,18 +57,6 @@ public class MainActivity extends AppCompatActivity implements EventAdapter.OnLi
     private void goToLogin() {
         startActivity(new Intent(this, AuthActivity.class));
         finish();
-    }
-
-    private void SetStaticEvents() {
-        events = new ArrayList<>();
-        events.add(new Event("Git Workshop", R.drawable.missing));
-        events.add(new Event("Pizza Party", R.drawable.missing));
-        events.add(new Event("Homework Help", R.drawable.missing));
-        events.add(new Event("Something cool", R.drawable.missing));
-        events.add(new Event("Designer class1", R.drawable.missing));
-        events.add(new Event("Designer class2", R.drawable.missing));
-        events.add(new Event("Designer class3", R.drawable.missing));
-        events.add(new Event("Designer class4", R.drawable.missing));
     }
 
     @Override
