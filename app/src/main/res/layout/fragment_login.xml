@@ -44,7 +44,7 @@
             app:layout_constraintTop_toBottomOf="@+id/password"
             android:layout_marginTop="50dp"
             app:layout_constraintLeft_toLeftOf="parent"
-            android:onClick="login"
+            android:onClick="signIn"
             android:text="@string/text_login"/>
     </androidx.constraintlayout.widget.ConstraintLayout>
 </FrameLayout>
