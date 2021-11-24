@@ -24,7 +24,9 @@ public class Event {
     public Event(String id, Map<String, Object> values) {
         this.id = id;
         title = (String) values.get("title");
-        dateTime = ((Timestamp) values.get("datetime")).toDate();
+        dateTime = ((Timestamp) values.get("datetime")) != null
+                ? ((Timestamp) values.get("datetime")).toDate()
+                : null;
         room = (String) values.get("room");
         description = (String) values.get("description");
     }

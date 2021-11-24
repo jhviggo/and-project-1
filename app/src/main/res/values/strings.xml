@@ -23,4 +23,8 @@
     <!-- EventsActivity -->
     <string name="events_title">List of Events</string>
     <string name="fab_event">Add new event</string>
+    <string name="text_title">Title (required)</string>
+    <string name="text_room">Room</string>
+    <string name="text_pick_date">Pick date</string>
+    <string name="text_pick_time">Pick time</string>
 </resources>

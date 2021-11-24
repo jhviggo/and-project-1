@@ -1,13 +1,12 @@
 package com.example.and_project.data;
 
-import android.util.Log;
-
 import androidx.lifecycle.LiveData;
 
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.ListenerRegistration;
+import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
@@ -20,17 +19,17 @@ public class EventLiveData extends LiveData<ArrayList<Event>> {
         }
         setValue(newData);
     };
-    CollectionReference databaseReference;
+    Query databaseQueryReference;
     ListenerRegistration listenerRegistration;
 
-    public EventLiveData(CollectionReference ref) {
-        databaseReference = ref;
+    public EventLiveData(Query ref) {
+        databaseQueryReference = ref;
     }
 
     @Override
     protected void onActive() {
         super.onActive();
-        listenerRegistration = databaseReference.addSnapshotListener(listener);
+        listenerRegistration = databaseQueryReference.addSnapshotListener(listener);
     }
 
     @Override

@@ -27,6 +27,7 @@ public class MainActivity extends AppCompatActivity implements EventAdapter.OnLi
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_events);
+        mAuth = FirebaseAuth.getInstance();
         rvEventsList = findViewById(R.id.rvEvents);
         events = new ArrayList<>();
         rvEventsList.setLayoutManager(new LinearLayoutManager(this));
@@ -35,7 +36,8 @@ public class MainActivity extends AppCompatActivity implements EventAdapter.OnLi
         eventsViewModel = new ViewModelProvider(this).get(EventsViewModel.class);
 
         eventsViewModel.getEvents().observe(this, values -> {
-            events.add(values.get(0));
+            events.clear();
+            events.addAll(values);
             adapter.notifyDataSetChanged();
         });
     }
@@ -43,7 +45,6 @@ public class MainActivity extends AppCompatActivity implements EventAdapter.OnLi
     @Override
     protected void onStart() {
         super.onStart();
-        mAuth = FirebaseAuth.getInstance();
         FirebaseUser currentUser = mAuth.getCurrentUser();
         if(currentUser == null){
             goToLogin();
