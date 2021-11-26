@@ -2,34 +2,26 @@ package com.example.and_project.data;
 
 import androidx.lifecycle.LiveData;
 
-import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.ListenerRegistration;
-import com.google.firebase.firestore.Query;
-import com.google.firebase.firestore.QuerySnapshot;
 
-import java.util.ArrayList;
-
-public class EventLiveData extends LiveData<ArrayList<Event>> {
-    private final EventListener<QuerySnapshot> listener = (value, error) -> {
-        ArrayList<Event> newData = new ArrayList<>();
-        for (DocumentSnapshot document : value.getDocuments()) {
-            newData.add(new Event(document.getId(), document.getData()));
-        }
-        setValue(newData);
+public class EventLiveData extends LiveData<Event> {
+    private final EventListener<DocumentSnapshot> listener = (value, error) -> {
+        setValue(new Event(value.getId(), value.getData()));
     };
-    Query databaseQueryReference;
+    DocumentReference documentReference;
     ListenerRegistration listenerRegistration;
 
-    public EventLiveData(Query ref) {
-        databaseQueryReference = ref;
+    public EventLiveData(DocumentReference ref) {
+        documentReference = ref;
     }
 
     @Override
     protected void onActive() {
         super.onActive();
-        listenerRegistration = databaseQueryReference.addSnapshotListener(listener);
+        listenerRegistration = documentReference.addSnapshotListener(listener);
     }
 
     @Override

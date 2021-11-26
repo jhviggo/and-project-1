@@ -13,11 +13,11 @@ import com.example.and_project.data.Event;
 
 import java.util.ArrayList;
 
-public class EventAdapter extends RecyclerView.Adapter<EventAdapter.ViewHolder> {
+public class EventListAdapter extends RecyclerView.Adapter<EventListAdapter.ViewHolder> {
     private ArrayList<Event> events;
     final private OnListItemClickListener listener;
 
-    EventAdapter(ArrayList<Event> events, OnListItemClickListener listener){
+    EventListAdapter(ArrayList<Event> events, OnListItemClickListener listener){
         this.events = events;
         this.listener = listener;
     }
@@ -31,6 +31,7 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.ViewHolder> 
 
     public void onBindViewHolder(@NonNull ViewHolder viewHolder, int position) {
         viewHolder.title.setText(events.get(position).getTitle());
+        viewHolder.time.setText(events.get(position).getDateTime());
     }
 
     public int getItemCount() {

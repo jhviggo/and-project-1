@@ -7,7 +7,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 
 import com.example.and_project.data.Event;
@@ -16,9 +15,9 @@ import com.google.firebase.auth.FirebaseUser;
 
 import java.util.ArrayList;
 
-public class MainActivity extends AppCompatActivity implements EventAdapter.OnListItemClickListener {
+public class MainActivity extends AppCompatActivity implements EventListAdapter.OnListItemClickListener {
     private RecyclerView rvEventsList;
-    private EventAdapter adapter;
+    private EventListAdapter adapter;
     private ArrayList<Event> events;
     private FirebaseAuth mAuth;
     private EventsViewModel eventsViewModel;
@@ -31,7 +30,7 @@ public class MainActivity extends AppCompatActivity implements EventAdapter.OnLi
         rvEventsList = findViewById(R.id.rvEvents);
         events = new ArrayList<>();
         rvEventsList.setLayoutManager(new LinearLayoutManager(this));
-        adapter = new EventAdapter(events, this);
+        adapter = new EventListAdapter(events, this);
         rvEventsList.setAdapter(adapter);
         eventsViewModel = new ViewModelProvider(this).get(EventsViewModel.class);
 
@@ -64,8 +63,7 @@ public class MainActivity extends AppCompatActivity implements EventAdapter.OnLi
     public void onListItemClick(int clickedItemIndex) {
         int eventIndex = clickedItemIndex;
         Intent singleEventIntent = new Intent(this, EventInfoActivity.class);
-        singleEventIntent.putExtra("title", events.get(eventIndex).getTitle());
-        singleEventIntent.putExtra("description", events.get(eventIndex).getDescription());
+        singleEventIntent.putExtra("event", events.get(eventIndex));
         startActivity(singleEventIntent);
     }
 }
