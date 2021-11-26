@@ -72,10 +72,14 @@ public class FirebaseRepository {
     }
 
     public UserLiveData getUserLiveData() {
-        if (userLiveData == null) {
+        if (userLiveData == null || userLiveData.getValue() == null) {
             userLiveData = new UserLiveData(userCollectionReference.document(mAuth.getCurrentUser().getUid()));
         }
         return userLiveData;
+    }
+
+    public FirebaseUser getCurrentUser() {
+        return mAuth.getCurrentUser();
     }
 
     /* Events */

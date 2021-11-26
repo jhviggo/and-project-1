@@ -29,7 +29,7 @@ public class EventOrganizerFragment extends Fragment {
         TextView tvOrganizerName = (TextView) view.findViewById(R.id.organizerName);
         TextView tvOrganizerEmail = (TextView) view.findViewById(R.id.organizerEmail);
         TextView tvOrganizerDescription = (TextView) view.findViewById(R.id.organizerDescription);
-        userViewModel.getCurrentUser().observe(this.getActivity(), value -> {
+        userViewModel.getUserLiveData().observe(this.getActivity(), value -> {
             tvOrganizerName.setText(value.getName());
             tvOrganizerEmail.setText(value.getEmail());
             tvOrganizerDescription.setText(value.getDescription());

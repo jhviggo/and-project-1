@@ -25,17 +25,20 @@ public class AuthActivity extends AppCompatActivity {
         setContentView(R.layout.activity_auth);
         emailPattern = Pattern.compile("\\d*@via.dk");
         viewModel = new ViewModelProvider(this).get(UserViewModel.class);
-        checkIfSignedIn();
         setupFrabmentTab();
+        if (isLoggedIn()) {
+            observeUser();
+        }
     }
 
     public void signIn(View view) {
         String email = "vig56@hotmail.com";
         String password = "test12345";
         viewModel.signIn(email, password).addOnCompleteListener(task -> {
-                    if (!task.isSuccessful())
-                        Toast.makeText(this, "Unable to sign in", Toast.LENGTH_SHORT).show();
-                });
+            if (!task.isSuccessful())
+                Toast.makeText(this, "Unable to sign in", Toast.LENGTH_SHORT).show();
+            goToMainActivity();
+            });
     }
 
     public void signUp(View view) {
@@ -53,16 +56,25 @@ public class AuthActivity extends AppCompatActivity {
         viewModel.signUp("vig56@hotmail.com", "test12345").addOnCompleteListener(task -> {
             if (!task.isSuccessful())
                 Toast.makeText(this, "Unable to sign up", Toast.LENGTH_SHORT).show();
+            goToMainActivity();
         });
     }
 
-    private void checkIfSignedIn() {
-        viewModel.getCurrentUser().observe(this, user -> {
+    private boolean isLoggedIn() {
+        return viewModel.getCurrentUser() != null;
+    }
+
+    private void observeUser() {
+        viewModel.getUserLiveData().observe(this, user -> {
             if (user != null) {
-                startActivity(new Intent(this, MainActivity.class));
-                finish();
+                goToMainActivity();
             }
         });
+    }
+
+    private void goToMainActivity() {
+        startActivity(new Intent(this, MainActivity.class));
+        finish();
     }
 
     private void setupFrabmentTab() {
