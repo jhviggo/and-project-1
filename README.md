@@ -10,17 +10,17 @@ VIA Events is an app to arrange events at the new VIA University College. It sho
 
 # Requirements
 The project has the following requirements.
+(Some of the requirements have been striked through because I could not find a solution for them. No public API or information available)
 
-| Requirement | Priority |
-|-------------|----------|
-| Users can log in| M |
-| Users can CRUD events | M |
-| Users can see a list of public events | M |
-| Events can be private that have guest lists | S |
-| Users can RSVP to events | S |
-| Events can have tags ie. talks, party, workshop | S |
-| Users can book rooms with VIA | C |
-| App has a display mode to be shown on TV | C |
-| App shows a map of the school | W |
-| Users can see which rooms are available | W |
-
+| Requirement | Priority | Complete |
+|-------------|----------|----------|
+| Users can log in| M | Yes |
+| Users can CRUD events | M | Partly |
+| Users can see a list of public events | M | Yes |
+| Events can be private that have guest lists | S | No |
+| Users can RSVP to events | S | Yes |
+| Events can have tags ie. talks, party, workshop | S | No |
+| ~~Users can book rooms with VIA~~ | C | No |
+| App has a display mode to be shown on TV | C | No |
+| ~~App shows a map of the school~~ | W | No |
+| ~~Users can see which rooms are available~~ | W | No |

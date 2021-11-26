@@ -1,34 +1,26 @@
 package com.example.and_project.data;
 
-import com.google.firebase.Timestamp;
-import java.util.Date;
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
-public class Event {
+public class Event implements Serializable {
     private String id;
     private String title;
-    private Date dateTime;
+    private String dateTime;
     private String room;
     private String description;
     private int imageId;
-
-    public Event(String title, int imageId) {
-        this.title = title;
-        this.id = "1";
-        this.dateTime = null;
-        this.room = "C02.15";
-        this.description = " I'm Batman. It was a dog. It was a big dog. The first time I stole so that I wouldn't starve, yes. I lost many assumptions about the simple nature of right and wrong.";
-        this.imageId = imageId;
-    }
+    private List<String> attendees;
 
     public Event(String id, Map<String, Object> values) {
         this.id = id;
         title = (String) values.get("title");
-        dateTime = ((Timestamp) values.get("datetime")) != null
-                ? ((Timestamp) values.get("datetime")).toDate()
-                : null;
+        dateTime = (String) values.get("isoDate");
         room = (String) values.get("room");
-        description = (String) values.get("description");
+        description = ((String) values.getOrDefault("description", "")).replace("\\n", "\n");
+        attendees = (List<String>) values.getOrDefault("attendees", new ArrayList<>());
     }
 
     public String getId() {
@@ -43,40 +35,34 @@ public class Event {
         return title;
     }
 
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
-    public Date getDateTime() {
+    public String getDateTime() {
         return dateTime;
-    }
-
-    public void setDateTime(Date dateTime) {
-        this.dateTime = dateTime;
     }
 
     public String getRoom() {
         return room;
     }
 
-    public void setRoom(String room) {
-        this.room = room;
-    }
-
     public String getDescription() {
         return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
     }
 
     public int getImageId() {
         return imageId;
     }
 
-    public void setImageId(int imageId) {
-        this.imageId = imageId;
+    public List<String> getAttendees() {
+        return attendees;
+    }
+
+    public String getPrettyDate() {
+        String[] dateArray = dateTime.split("T")[0].split("-");
+        String prettyDate = String.format("%s/%s %s", dateArray[2], dateArray[1], dateArray[0]);
+        return prettyDate;
+    }
+
+    public String getPrettyTime() {
+        return dateTime.split("T")[1];
     }
 
     public String toString() {

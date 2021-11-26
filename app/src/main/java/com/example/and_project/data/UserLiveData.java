@@ -2,21 +2,32 @@ package com.example.and_project.data;
 
 import androidx.lifecycle.LiveData;
 
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.EventListener;
+import com.google.firebase.firestore.ListenerRegistration;
 
-public class UserLiveData extends LiveData<FirebaseUser> {
-    private final FirebaseAuth.AuthStateListener listener = firebaseAuth -> setValue(firebaseAuth.getCurrentUser());
+public class UserLiveData extends LiveData<User> {
+    private final EventListener<DocumentSnapshot> listener = (value, error) -> {
+        setValue(new User(value.getData()));
+    };
+    DocumentReference documentReference;
+    ListenerRegistration listenerRegistration;
+
+    public UserLiveData(DocumentReference ref) {
+        documentReference = ref;
+    }
 
     @Override
     protected void onActive() {
         super.onActive();
-        FirebaseAuth.getInstance().addAuthStateListener(listener);
+        listenerRegistration = documentReference.addSnapshotListener(listener);
     }
 
     @Override
     protected void onInactive() {
         super.onInactive();
-        FirebaseAuth.getInstance().removeAuthStateListener(listener);
+        if (listenerRegistration != null)
+            listenerRegistration.remove();
     }
 }

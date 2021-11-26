@@ -7,9 +7,9 @@ import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 
 import com.example.and_project.data.FirebaseRepository;
+import com.example.and_project.data.User;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
-import com.google.firebase.auth.FirebaseUser;
 
 public class UserViewModel extends AndroidViewModel {
     private final FirebaseRepository firebaseRepository;
@@ -19,8 +19,8 @@ public class UserViewModel extends AndroidViewModel {
         firebaseRepository = FirebaseRepository.getInstance();
     }
 
-    public LiveData<FirebaseUser> getCurrentUser() {
-        return firebaseRepository.getCurrentUser();
+    public LiveData<User> getCurrentUser() {
+        return firebaseRepository.getUserLiveData();
     }
 
     public Task<AuthResult> signIn(String email, String password) {
