@@ -101,6 +101,10 @@ public class MainActivity extends AppCompatActivity implements EventListAdapter.
                     Intent myEventsIntent = new Intent(this, MyEventsActivity.class);
                     myEventsIntent.putExtra("uid", userLiveData.getValue().getUid());
                     startActivity(myEventsIntent);
+                    break;
+                case R.id.nav_about:
+                    startActivity(new Intent(this, AboutActivity.class));
+                    break;
             }
             return true;
         });
