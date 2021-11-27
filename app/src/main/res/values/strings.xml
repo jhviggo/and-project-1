@@ -32,6 +32,7 @@
     <string name="text_room">Room</string>
     <string name="text_pick_date">Pick date</string>
     <string name="text_pick_time">Pick time</string>
+    <string name="my_events_title">My events</string>
 
     <!-- EventInfo -->
     <string name="tab_information">Information</string>

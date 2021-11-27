@@ -7,7 +7,6 @@ import androidx.lifecycle.ViewModelProvider;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -46,8 +45,10 @@ public class AuthActivity extends AppCompatActivity {
         viewModel.signIn(email, password).addOnCompleteListener(task -> {
             if (!task.isSuccessful())
                 Toast.makeText(this, "Unable to sign in", Toast.LENGTH_SHORT).show();
-            else
+            else {
+                viewModel.updateUserLiveData();
                 goToMainActivity();
+            }
             });
     }
 
@@ -75,11 +76,10 @@ public class AuthActivity extends AppCompatActivity {
         viewModel.signUp(tvUsername.getText().toString(), tvPassword.getText().toString()).addOnCompleteListener(task -> {
             if (!task.isSuccessful()) {
                 Toast.makeText(this, "Unable to sign up", Toast.LENGTH_SHORT).show();
-                Log.d("welp", task.getException().toString());
-                Log.d("welp", task.getResult().toString());
             } else {
                 goToMainActivity();
                 viewModel.addUserDetails(tvName.getText().toString(), tvDescription.getText().toString());
+                viewModel.updateUserLiveData();
             }
         });
     }

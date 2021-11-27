@@ -36,6 +36,10 @@ public class UserViewModel extends AndroidViewModel {
         return firebaseRepository.signUp(email, password);
     }
 
+    public void updateUserLiveData() {
+        firebaseRepository.getUserLiveData();
+    }
+
     public void addUserDetails(String name, String description) {
         FirebaseUser user = getCurrentUser();
         if (user != null) {

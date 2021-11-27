@@ -22,4 +22,8 @@ public class EventsViewModel extends AndroidViewModel {
     public LiveData<ArrayList<Event>> getEvents() {
         return firebaseRepository.getEventListLiveData();
     }
+
+    public LiveData<ArrayList<Event>> getEventsForUser(String uid) {
+        return firebaseRepository.createEventListLiveDataForUser(uid);
+    }
 }

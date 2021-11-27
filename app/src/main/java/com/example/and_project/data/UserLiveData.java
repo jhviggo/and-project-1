@@ -19,10 +19,6 @@ public class UserLiveData extends LiveData<User> {
         documentReference = ref;
     }
 
-    public UserLiveData() {
-        setValue(null);
-    }
-
     @Override
     protected void onActive() {
         super.onActive();
