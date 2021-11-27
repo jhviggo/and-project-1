@@ -1,15 +1,24 @@
 package com.example.and_project;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
+import android.widget.TextView;
 
 import com.example.and_project.data.Event;
+import com.example.and_project.data.User;
+import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
@@ -21,24 +30,29 @@ public class MainActivity extends AppCompatActivity implements EventListAdapter.
     private ArrayList<Event> events;
     private FirebaseAuth mAuth;
     private EventsViewModel eventsViewModel;
+    private UserViewModel userViewModel;
+    private LiveData<User> userLiveData;
+
+    public DrawerLayout drawerLayout;
+    public ActionBarDrawerToggle actionBarDrawerToggle;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_events);
+        setContentView(R.layout.activity_main);
         mAuth = FirebaseAuth.getInstance();
-        rvEventsList = findViewById(R.id.rvEvents);
-        events = new ArrayList<>();
-        rvEventsList.setLayoutManager(new LinearLayoutManager(this));
-        adapter = new EventListAdapter(events, this);
-        rvEventsList.setAdapter(adapter);
-        eventsViewModel = new ViewModelProvider(this).get(EventsViewModel.class);
+        userViewModel = new ViewModelProvider(this).get(UserViewModel.class);
+        userLiveData = userViewModel.getUserLiveData();
+        initNavigationDrawer();
+        initRecycleView();
+    }
 
-        eventsViewModel.getEvents().observe(this, values -> {
-            events.clear();
-            events.addAll(values);
-            adapter.notifyDataSetChanged();
-        });
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        if (actionBarDrawerToggle.onOptionsItemSelected(item)) {
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     @Override
@@ -65,5 +79,46 @@ public class MainActivity extends AppCompatActivity implements EventListAdapter.
         Intent singleEventIntent = new Intent(this, EventInfoActivity.class);
         singleEventIntent.putExtra("event", events.get(eventIndex));
         startActivity(singleEventIntent);
+    }
+
+    private void initNavigationDrawer() {
+        // Navigation drawer / bar is based on https://proandroiddev.com/easy-approach-to-navigation-drawer-7fe87d8fd7e7
+        setSupportActionBar(findViewById(R.id.toolbar));
+        drawerLayout = findViewById(R.id.drawer_layout);
+        actionBarDrawerToggle = new ActionBarDrawerToggle(this, drawerLayout, R.string.nav_open, R.string.nav_close);
+        drawerLayout.addDrawerListener(actionBarDrawerToggle);
+        actionBarDrawerToggle.syncState();
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+        NavigationView navigationView = (NavigationView) findViewById(R.id.navigation_view);
+        navigationView.setNavigationItemSelectedListener((NavigationView.OnNavigationItemSelectedListener) menuItem -> {
+            switch (menuItem.getItemId()) {
+                case R.id.nav_logout:
+                    userViewModel.signOut();
+                    goToLogin();
+                    break;
+            }
+            return true;
+        });
+
+        View headerView = navigationView.getHeaderView(0);
+        userLiveData.observe(this, value -> {
+            ((TextView)headerView.findViewById(R.id.nav_username)).setText(value.getName());
+            ((TextView)headerView.findViewById(R.id.nav_email)).setText(value.getEmail());
+        });
+    }
+
+    private void initRecycleView() {
+        events = new ArrayList<>();
+        rvEventsList = findViewById(R.id.rvEvents);
+        rvEventsList.setLayoutManager(new LinearLayoutManager(this));
+        adapter = new EventListAdapter(events, this);
+        rvEventsList.setAdapter(adapter);
+        eventsViewModel = new ViewModelProvider(this).get(EventsViewModel.class);
+        eventsViewModel.getEvents().observe(this, values -> {
+            events.clear();
+            events.addAll(values);
+            adapter.notifyDataSetChanged();
+        });
     }
 }
