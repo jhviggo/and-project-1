@@ -1,6 +1,7 @@
 package com.example.and_project;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.ViewModelProvider;
@@ -48,6 +49,7 @@ public class EventInfoActivity extends AppCompatActivity {
         attendeesFragment = new EventAttendeesFragment(attendeesAdapter);
         organizerFragment = new EventOrganizerFragment(userViewModel);
         setupFrabmentTab();
+        initToolbar();
 
         eventViewModel = new ViewModelProvider(this).get(EventViewModel.class);
         eventViewModel.getEvents(event.getId()).observe(this, value -> {
@@ -68,8 +70,22 @@ public class EventInfoActivity extends AppCompatActivity {
         });
     }
 
+    @Override
+    public boolean onSupportNavigateUp() {
+        finish();
+        return true;
+    }
+
     public void attendEvent(View view) {
         repository.attendEvent(event.getId());
+    }
+
+    private void initToolbar() {
+        Toolbar toolbar = (Toolbar) findViewById(R.id.eventInfo_toolbar);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
+        getSupportActionBar().setTitle(event.getTitle());
     }
 
     private void setupFrabmentTab() {
