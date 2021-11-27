@@ -2,7 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.and_project">
 
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
 
     <application
         android:allowBackup="true"
@@ -11,6 +11,9 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.And_project">
+        <activity
+            android:name=".MyEventsActivity"
+            android:exported="false" />
         <activity
             android:name=".EventInfoActivity"
             android:exported="false" />
@@ -30,4 +33,5 @@
             android:name=".AuthActivity"
             android:exported="false" />
     </application>
+
 </manifest>

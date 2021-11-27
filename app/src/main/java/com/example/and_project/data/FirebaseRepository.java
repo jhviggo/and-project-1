@@ -1,7 +1,5 @@
 package com.example.and_project.data;
 
-import androidx.lifecycle.LiveData;
-
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
@@ -77,7 +75,7 @@ public class FirebaseRepository {
         String uid = mAuth.getCurrentUser() != null
                 ? mAuth.getCurrentUser().getUid()
                 : "-1"; // invalid uid to return null to prevent firebase from throwing
-        if (userLiveData == null || userLiveData.getValue() == null) {
+        if (uid != null && !uid.isEmpty()) {
             userLiveData = new UserLiveData(userCollectionReference.document(uid));
         }
         return userLiveData;
@@ -105,6 +103,14 @@ public class FirebaseRepository {
         return eventListLiveData;
     }
 
+    public EventListLiveData createEventListLiveDataForUser(String uid) {
+        Query myEventsQuery = eventCollectionReference
+                .orderBy(ISO_DATE, Query.Direction.DESCENDING)
+                .whereGreaterThan(ISO_DATE, LocalDateTime.now().toString())
+                .whereEqualTo(ORGANIZER, uid);
+        return new EventListLiveData(myEventsQuery);
+    }
+
     public Task<DocumentReference> addEvent(String title, String ISODate, String room, String description) {
         Map<String, Object> docData = new HashMap<>();
         docData.put(ATTENDEES, new ArrayList<>());
@@ -122,6 +128,7 @@ public class FirebaseRepository {
         DocumentReference doc = eventCollectionReference.document(eventId);
         return new EventLiveData(doc);
     }
+
     public Query getAttendeeUsers(List<String> userUids) {
         if (userUids.isEmpty()) {
             return null;

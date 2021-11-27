@@ -11,7 +11,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
@@ -95,8 +94,13 @@ public class MainActivity extends AppCompatActivity implements EventListAdapter.
             switch (menuItem.getItemId()) {
                 case R.id.nav_logout:
                     userViewModel.signOut();
+                    userViewModel.updateUserLiveData();
                     goToLogin();
                     break;
+                case R.id.nav_myEvents:
+                    Intent myEventsIntent = new Intent(this, MyEventsActivity.class);
+                    myEventsIntent.putExtra("uid", userLiveData.getValue().getUid());
+                    startActivity(myEventsIntent);
             }
             return true;
         });

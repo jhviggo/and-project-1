@@ -12,11 +12,13 @@ import java.util.ArrayList;
 
 public class EventListLiveData extends LiveData<ArrayList<Event>> {
     private final EventListener<QuerySnapshot> listener = (value, error) -> {
-        ArrayList<Event> newData = new ArrayList<>();
-        for (DocumentSnapshot document : value.getDocuments()) {
-            newData.add(new Event(document.getId(), document.getData()));
+        if (value != null) {
+            ArrayList<Event> newData = new ArrayList<>();
+            for (DocumentSnapshot document : value.getDocuments()) {
+                newData.add(new Event(document.getId(), document.getData()));
+            }
+            setValue(newData);
         }
-        setValue(newData);
     };
     Query databaseQueryReference;
     ListenerRegistration listenerRegistration;
