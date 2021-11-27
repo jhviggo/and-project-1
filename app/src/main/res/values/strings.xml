@@ -41,4 +41,9 @@
 
     <!-- CreateEvent -->
     <string name="createEvent_title">Create an event</string>
+
+    <!-- AboutActivity -->
+    <string name="about_title">About this App</string>
+    <string name="about_author">Developed by Viggo Petersen.</string>
+    <string name="about_description">It is a 4th semester Android Course Exam Project made with love, care and soooo much Google searching. I wonder if the teachers even look at this page... They might not, probably? If you guys see this page, hi!</string>
 </resources>
