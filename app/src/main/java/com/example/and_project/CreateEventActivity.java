@@ -2,6 +2,7 @@ package com.example.and_project;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
@@ -51,6 +52,13 @@ public class CreateEventActivity extends AppCompatActivity {
         tvDate = (DatePicker) findViewById(R.id.eventDate);
         tvTime = (TimePicker) findViewById(R.id.eventTime);
         tvDescription = findViewById(R.id.eventDescription);
+        initToolbar();
+    }
+
+    @Override
+    public boolean onSupportNavigateUp() {
+        finish();
+        return true;
     }
 
     public void addNewEvent(View view) {
@@ -84,6 +92,14 @@ public class CreateEventActivity extends AppCompatActivity {
         Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
         intent.setType("image/*");
         startActivityForResult(intent, PICK_IMAGE);
+    }
+
+    private void initToolbar() {
+        Toolbar toolbar = (Toolbar) findViewById(R.id.eventInfo_toolbar);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
+        getSupportActionBar().setTitle(R.string.createEvent_title);
     }
 
     /** based on https://medium.com/@hasangi/capture-image-or-choose-from-gallery-photos-implementation-for-android-a5ca59bc6883 */
