@@ -9,13 +9,18 @@ import com.google.firebase.firestore.ListenerRegistration;
 
 public class UserLiveData extends LiveData<User> {
     private final EventListener<DocumentSnapshot> listener = (value, error) -> {
-        setValue(new User(value.getData()));
+        if (value != null && value.getData() != null)
+            setValue(new User(value.getData()));
     };
     DocumentReference documentReference;
     ListenerRegistration listenerRegistration;
 
     public UserLiveData(DocumentReference ref) {
         documentReference = ref;
+    }
+
+    public UserLiveData() {
+        setValue(null);
     }
 
     @Override
