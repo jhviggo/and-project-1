@@ -47,7 +47,7 @@ public class EventInfoActivity extends AppCompatActivity {
         attendeesAdapter = new ArrayAdapter<>(this, R.layout.attendee_list_item, R.id.lvAttendeeName, event.getAttendees());
         informationFragment = new EventInformationFragment(event);
         attendeesFragment = new EventAttendeesFragment(attendeesAdapter);
-        organizerFragment = new EventOrganizerFragment(userViewModel);
+        organizerFragment = new EventOrganizerFragment(repository.getUserById(event.getOrganizer()));
         setupFrabmentTab();
         initToolbar();
 

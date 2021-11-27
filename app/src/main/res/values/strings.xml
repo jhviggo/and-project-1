@@ -18,7 +18,7 @@
     <!-- LoginFragment & SignUpFragment -->
     <string name="text_login">Login</string>
     <string name="text_sign_up">Sign up</string>
-    <string name="text_username">VIA ID</string>
+    <string name="text_username">VIA email</string>
     <string name="text_password">Password</string>
     <string name="text_login_help">To create an Account, please click the tab at the bottom.</string>
     <string name="text_name">Name</string>

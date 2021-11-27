@@ -14,12 +14,13 @@ import android.widget.TextView;
 import com.example.and_project.data.Event;
 import com.example.and_project.data.FirebaseRepository;
 import com.example.and_project.data.User;
+import com.google.firebase.firestore.DocumentReference;
 
 public class EventOrganizerFragment extends Fragment {
-    UserViewModel userViewModel;
+    DocumentReference userDoc;
 
-    public EventOrganizerFragment(UserViewModel userViewModel) {
-        this.userViewModel = userViewModel;
+    public EventOrganizerFragment(DocumentReference userDoc) {
+        this.userDoc = userDoc;
     }
 
     @Nullable
@@ -29,10 +30,12 @@ public class EventOrganizerFragment extends Fragment {
         TextView tvOrganizerName = (TextView) view.findViewById(R.id.organizerName);
         TextView tvOrganizerEmail = (TextView) view.findViewById(R.id.organizerEmail);
         TextView tvOrganizerDescription = (TextView) view.findViewById(R.id.organizerDescription);
-        userViewModel.getUserLiveData().observe(this.getActivity(), value -> {
-            tvOrganizerName.setText(value.getName());
-            tvOrganizerEmail.setText(value.getEmail());
-            tvOrganizerDescription.setText(value.getDescription());
+        userDoc.addSnapshotListener((value, error) -> {
+            if (value != null && value.getData() != null) {
+                tvOrganizerName.setText(value.getString("name"));
+                tvOrganizerEmail.setText(value.getString("email"));
+                tvOrganizerDescription.setText(value.getString("description"));
+            }
         });
         return view;
     }

@@ -11,6 +11,7 @@ public class Event implements Serializable {
     private String dateTime;
     private String room;
     private String description;
+    String organizer;
     private int imageId;
     private List<String> attendees;
 
@@ -21,6 +22,7 @@ public class Event implements Serializable {
         room = (String) values.get("room");
         description = ((String) values.getOrDefault("description", "")).replace("\\n", "\n");
         attendees = (List<String>) values.getOrDefault("attendees", new ArrayList<>());
+        organizer = (String) values.get("organizer");
     }
 
     public String getId() {
@@ -49,6 +51,10 @@ public class Event implements Serializable {
 
     public int getImageId() {
         return imageId;
+    }
+
+    public String getOrganizer() {
+        return organizer;
     }
 
     public List<String> getAttendees() {

@@ -7,6 +7,7 @@ import androidx.lifecycle.ViewModelProvider;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -32,12 +33,21 @@ public class AuthActivity extends AppCompatActivity {
     }
 
     public void signIn(View view) {
-        String email = "vig56@hotmail.com";
-        String password = "test12345";
+        TextView tvUsername = (TextView)findViewById(R.id.username);
+        TextView tvPassword = (TextView)findViewById(R.id.password);
+
+        String email = tvUsername.getText().toString();
+        String password = tvPassword.getText().toString();
+        if (email.isEmpty() || password.isEmpty()) {
+            Toast.makeText(this, "Please fill in both email and password", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
         viewModel.signIn(email, password).addOnCompleteListener(task -> {
             if (!task.isSuccessful())
                 Toast.makeText(this, "Unable to sign in", Toast.LENGTH_SHORT).show();
-            goToMainActivity();
+            else
+                goToMainActivity();
             });
     }
 
@@ -45,18 +55,32 @@ public class AuthActivity extends AppCompatActivity {
         TextView tvUsername = findViewById(R.id.signUpUsername);
         TextView tvPassword = findViewById(R.id.signUpPassword);
         TextView tvPasswordRepeat = findViewById(R.id.signUpPasswordRepeat);
+        TextView tvDescription = findViewById(R.id.signUpDescription);
+        TextView tvName = findViewById(R.id.signUpName);
 
         if (!emailPattern.matcher(tvUsername.getText()).matches()) {
             Toast.makeText(this, "Please use a @via.dk mail", Toast.LENGTH_SHORT).show();
+            return;
         }
 
-        if (!tvPassword.equals(tvPasswordRepeat)) {
-            Toast.makeText(this, "Passwords do not match", Toast.LENGTH_SHORT).show();
+        if (tvPassword.getText().toString().length() < 6) {
+            Toast.makeText(this, "Password must be at least 6 characters", Toast.LENGTH_SHORT).show();
+            return;
         }
-        viewModel.signUp("vig56@hotmail.com", "test12345").addOnCompleteListener(task -> {
-            if (!task.isSuccessful())
+
+        if (!tvPassword.getText().toString().equals(tvPasswordRepeat.getText().toString())) {
+            Toast.makeText(this, "Passwords do not match", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        viewModel.signUp(tvUsername.getText().toString(), tvPassword.getText().toString()).addOnCompleteListener(task -> {
+            if (!task.isSuccessful()) {
                 Toast.makeText(this, "Unable to sign up", Toast.LENGTH_SHORT).show();
-            goToMainActivity();
+                Log.d("welp", task.getException().toString());
+                Log.d("welp", task.getResult().toString());
+            } else {
+                goToMainActivity();
+                viewModel.addUserDetails(tvName.getText().toString(), tvDescription.getText().toString());
+            }
         });
     }
 

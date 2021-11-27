@@ -29,6 +29,8 @@ public class FirebaseRepository {
     private static String ORGANIZER = "organizer";
     private static String IMAGE = "image";
     private static String UID = "uid";
+    private static String EMAIL = "email";
+    private static String NAME = "name";
 
     private static FirebaseRepository instance;
     private FirebaseAuth mAuth;
@@ -72,14 +74,30 @@ public class FirebaseRepository {
     }
 
     public UserLiveData getUserLiveData() {
+        String uid = mAuth.getCurrentUser() != null
+                ? mAuth.getCurrentUser().getUid()
+                : "-1"; // invalid uid to return null to prevent firebase from throwing
         if (userLiveData == null || userLiveData.getValue() == null) {
-            userLiveData = new UserLiveData(userCollectionReference.document(mAuth.getCurrentUser().getUid()));
+            userLiveData = new UserLiveData(userCollectionReference.document(uid));
         }
         return userLiveData;
     }
 
     public FirebaseUser getCurrentUser() {
         return mAuth.getCurrentUser();
+    }
+
+    public void addUserDetails(String email, String name, String uid, String description) {
+        Map<String, Object> docData = new HashMap<>();
+        docData.put(EMAIL, email);
+        docData.put(NAME, name);
+        docData.put(UID, uid);
+        docData.put(DESCRIPTION, description);
+        userCollectionReference.document(uid).set(docData);
+    }
+
+    public DocumentReference getUserById(String uid) {
+        return userCollectionReference.document(uid);
     }
 
     /* Events */
