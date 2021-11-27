@@ -37,6 +37,7 @@ public class CreateEventActivity extends AppCompatActivity {
     DatePicker tvDate;
     TimePicker tvTime;
     TextView tvDescription;
+    Bitmap eventImage;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,14 +70,18 @@ public class CreateEventActivity extends AppCompatActivity {
             return;
         }
         String ISODate = LocalDateTime.of(tvDate.getYear(), tvDate.getMonth(), tvDate.getDayOfMonth(), tvTime.getHour(), tvTime.getMinute()).toString();
-
+        boolean hasImage = eventImage != null;
         repository.addEvent(
                 tvTitle.getText().toString(),
                 ISODate,
                 tvRoom.getText().toString(),
-                tvDescription.getText().toString()
+                tvDescription.getText().toString(),
+                hasImage
         ).addOnCompleteListener(task -> {
             if (task.isSuccessful()) {
+                if (eventImage != null) {
+                    repository.uploadImage(eventImage, task.getResult().getId());
+                }
                 finish();
             } else {
                 Toast.makeText(this, "Unable to create event at this time", Toast.LENGTH_SHORT).show();
@@ -114,7 +119,10 @@ public class CreateEventActivity extends AppCompatActivity {
             int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
             String picturePath = cursor.getString(columnIndex);
             Bitmap bitmap = BitmapFactory.decodeFile(picturePath);
-            ibImage.setImageBitmap(bitmap);
+            // Scale image to some kinda meaningful dimensions to save storage bandwidth
+            Bitmap scaledBitmap = Bitmap.createScaledBitmap(bitmap, 1000, 400, false);
+            eventImage = scaledBitmap;
+            ibImage.setImageBitmap(scaledBitmap);
             if (cursor != null)
                 cursor.close();
         }

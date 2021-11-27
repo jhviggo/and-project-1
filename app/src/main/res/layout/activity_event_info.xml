@@ -17,9 +17,11 @@
     </androidx.appcompat.widget.Toolbar>
 
     <ImageView
+        android:id="@+id/eventInfoImage"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="0dp"
+        android:adjustViewBounds="true"
         android:src="@drawable/image_coming" />
 
     <com.google.android.material.tabs.TabLayout
@@ -49,5 +51,4 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="15dp"
         android:layout_marginRight="15dp"/>
-
 </LinearLayout>
