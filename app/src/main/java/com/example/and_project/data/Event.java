@@ -11,8 +11,8 @@ public class Event implements Serializable {
     private String dateTime;
     private String room;
     private String description;
-    String organizer;
-    private int imageId;
+    private String organizer;
+    private boolean hasImage;
     private List<String> attendees;
 
     public Event(String id, Map<String, Object> values) {
@@ -23,6 +23,7 @@ public class Event implements Serializable {
         description = ((String) values.getOrDefault("description", "")).replace("\\n", "\n");
         attendees = (List<String>) values.getOrDefault("attendees", new ArrayList<>());
         organizer = (String) values.get("organizer");
+        hasImage = (Boolean) values.getOrDefault("hasImage", false);
     }
 
     public String getId() {
@@ -49,8 +50,8 @@ public class Event implements Serializable {
         return description;
     }
 
-    public int getImageId() {
-        return imageId;
+    public boolean hasImage() {
+        return hasImage;
     }
 
     public String getOrganizer() {

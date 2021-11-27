@@ -1,5 +1,7 @@
 package com.example.and_project;
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,16 +12,19 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.and_project.data.Event;
+import com.example.and_project.data.FirebaseRepository;
 
 import java.util.ArrayList;
 
 public class EventListAdapter extends RecyclerView.Adapter<EventListAdapter.ViewHolder> {
     private ArrayList<Event> events;
     final private OnListItemClickListener listener;
+    final private FirebaseRepository repository;
 
     EventListAdapter(ArrayList<Event> events, OnListItemClickListener listener){
         this.events = events;
         this.listener = listener;
+        repository = FirebaseRepository.getInstance();
     }
 
     @NonNull
@@ -32,6 +37,17 @@ public class EventListAdapter extends RecyclerView.Adapter<EventListAdapter.View
     public void onBindViewHolder(@NonNull ViewHolder viewHolder, int position) {
         viewHolder.title.setText(events.get(position).getTitle());
         viewHolder.time.setText(events.get(position).getDateTime());
+        if (events.get(position).hasImage()) {
+            // Images should probably be references in firestore on the events objects
+            // That was I wouldn't have to keep downloading them like this
+            repository.getImage(events.get(position).getId()).addOnCompleteListener(value -> {
+                if (value.isSuccessful()) {
+                    BitmapFactory.Options options = new BitmapFactory.Options();
+                    Bitmap bitmap = BitmapFactory.decodeByteArray(value.getResult(), 0, value.getResult().length, options);
+                    viewHolder.image.setImageBitmap(bitmap);
+                }
+            });
+        }
     }
 
     public int getItemCount() {

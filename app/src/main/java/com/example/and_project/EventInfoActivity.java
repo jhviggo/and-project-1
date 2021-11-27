@@ -7,9 +7,12 @@ import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.ViewModelProvider;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 
 import com.example.and_project.data.Event;
 import com.example.and_project.data.FirebaseRepository;
@@ -28,6 +31,7 @@ public class EventInfoActivity extends AppCompatActivity {
     UserViewModel userViewModel;
     EventViewModel eventViewModel;
     ArrayAdapter<String> attendeesAdapter;
+    ImageView eventImage;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,6 +39,7 @@ public class EventInfoActivity extends AppCompatActivity {
         setContentView(R.layout.activity_event_info);
         repository = FirebaseRepository.getInstance();
         Intent intent = getIntent();
+        eventImage = (ImageView) findViewById(R.id.eventInfoImage);
         event = (Event)intent.getExtras().get("event");
         userViewModel = new ViewModelProvider(this).get(UserViewModel.class);
         attendeesAdapter = new ArrayAdapter<>(this, R.layout.attendee_list_item, R.id.lvAttendeeName, event.getAttendees());
@@ -61,6 +66,8 @@ public class EventInfoActivity extends AppCompatActivity {
                 });
             }
         });
+        if (event.hasImage())
+            updateEventImage();
     }
 
     @Override
@@ -71,6 +78,18 @@ public class EventInfoActivity extends AppCompatActivity {
 
     public void attendEvent(View view) {
         repository.attendEvent(event.getId());
+    }
+
+    private void updateEventImage() {
+        // Images should probably be references in firestore on the events objects
+        // That was I wouldn't have to keep downloading them like this
+        eventViewModel.getImage(event.getId()).addOnCompleteListener(value -> {
+            if (value.isSuccessful()) {
+                BitmapFactory.Options options = new BitmapFactory.Options();
+                Bitmap bitmap = BitmapFactory.decodeByteArray(value.getResult(), 0, value.getResult().length, options);
+                eventImage.setImageBitmap(bitmap);
+            }
+        });
     }
 
     private void initToolbar() {

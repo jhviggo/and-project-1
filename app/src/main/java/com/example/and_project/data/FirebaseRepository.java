@@ -1,5 +1,7 @@
 package com.example.and_project.data;
 
+import android.graphics.Bitmap;
+
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
@@ -9,7 +11,10 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 
+import java.io.ByteArrayOutputStream;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -20,27 +25,32 @@ public class FirebaseRepository {
     private static String COLLECTION_EVENTS = "events";
     private static String COLLECTION_USERS = "users";
     private static String ATTENDEES = "attendees";
-    public static String TITLE = "title";
+    private static String TITLE = "title";
     private static String ISO_DATE = "isoDate";
     private static String ROOM = "room";
     private static String DESCRIPTION = "description";
     private static String ORGANIZER = "organizer";
-    private static String IMAGE = "image";
+    private static String HAS_IMAGE = "hasImage";
     private static String UID = "uid";
     private static String EMAIL = "email";
     private static String NAME = "name";
 
     private static FirebaseRepository instance;
     private FirebaseAuth mAuth;
-    FirebaseFirestore database = FirebaseFirestore.getInstance();
+    private FirebaseFirestore database;
+    private FirebaseStorage storage;
     private final EventListLiveData eventListLiveData;
     private UserLiveData userLiveData;
     private CollectionReference eventCollectionReference;
     private CollectionReference userCollectionReference;
+    private StorageReference storageRef;
     private Query eventsQuery;
 
     private FirebaseRepository() {
         mAuth = FirebaseAuth.getInstance();
+        database = FirebaseFirestore.getInstance();
+        storage = FirebaseStorage.getInstance();
+        storageRef = storage.getReference();
         eventCollectionReference = database.collection(COLLECTION_EVENTS);
         userCollectionReference = database.collection(COLLECTION_USERS);
 
@@ -111,7 +121,7 @@ public class FirebaseRepository {
         return new EventListLiveData(myEventsQuery);
     }
 
-    public Task<DocumentReference> addEvent(String title, String ISODate, String room, String description) {
+    public Task<DocumentReference> addEvent(String title, String ISODate, String room, String description, boolean hasImage) {
         Map<String, Object> docData = new HashMap<>();
         docData.put(ATTENDEES, new ArrayList<>());
         docData.put(TITLE, title);
@@ -119,7 +129,7 @@ public class FirebaseRepository {
         docData.put(ROOM, room);
         docData.put(DESCRIPTION, description);
         docData.put(ORGANIZER, mAuth.getCurrentUser().getUid());
-        docData.put(IMAGE, null);
+        docData.put(HAS_IMAGE, hasImage);
 
         return eventCollectionReference.add(docData);
     }
@@ -151,5 +161,18 @@ public class FirebaseRepository {
             }
             return snapshop;
         });
+    }
+
+    /* Storage */
+    public void uploadImage(Bitmap bitmap, String fileName) {
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+        byte[] data = baos.toByteArray();
+        storageRef.child(fileName).putBytes(data);
+    }
+
+    public Task<byte[]> getImage(String eventId) {
+        final long BYTE_ARRAY_LENGTH = 256 * 1024; // 256KB
+        return storageRef.child(eventId).getBytes(BYTE_ARRAY_LENGTH);
     }
 }
