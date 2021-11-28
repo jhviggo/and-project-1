@@ -24,3 +24,12 @@ The project has the following requirements.
 | App has a display mode to be shown on TV | C | No |
 | ~~App shows a map of the school~~ | W | No |
 | ~~Users can see which rooms are available~~ | W | No |
+
+## Missing features
+* It is not possile to search/filter for event tags, but it is possible to add then so a search function can be added later
+* It is not possible to edit or remove events
+* It is not possible to actually book rooms at VIA as I couldn't find an API for it
+* It is not possible to see a map of the school as I could not find one
+* It is not possible to see if rooms are available as VIA has no API for it
+* Images are scaled to a hardcoded size to save bandwidth
+* It is not possible to remove attendance from an event
