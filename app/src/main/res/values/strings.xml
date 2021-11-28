@@ -41,6 +41,7 @@
 
     <!-- CreateEvent -->
     <string name="createEvent_title">Create an event</string>
+    <string name="event_is_public">Is event public?</string>
 
     <!-- AboutActivity -->
     <string name="about_title">About this App</string>

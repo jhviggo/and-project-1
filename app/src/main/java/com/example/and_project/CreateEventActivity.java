@@ -19,6 +19,7 @@ import android.provider.MediaStore;
 import android.view.View;
 import android.widget.DatePicker;
 import android.widget.ImageButton;
+import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
@@ -70,13 +71,15 @@ public class CreateEventActivity extends AppCompatActivity {
             return;
         }
         String ISODate = LocalDateTime.of(tvDate.getYear(), tvDate.getMonth(), tvDate.getDayOfMonth(), tvTime.getHour(), tvTime.getMinute()).toString();
+        Switch tbIsPublic = (Switch) findViewById(R.id.eventIsPublic);
         boolean hasImage = eventImage != null;
         repository.addEvent(
                 tvTitle.getText().toString(),
                 ISODate,
                 tvRoom.getText().toString(),
                 tvDescription.getText().toString(),
-                hasImage
+                hasImage,
+                tbIsPublic.isChecked()
         ).addOnCompleteListener(task -> {
             if (task.isSuccessful()) {
                 if (eventImage != null) {

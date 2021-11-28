@@ -37,6 +37,12 @@ public class EventListAdapter extends RecyclerView.Adapter<EventListAdapter.View
     public void onBindViewHolder(@NonNull ViewHolder viewHolder, int position) {
         viewHolder.title.setText(events.get(position).getTitle());
         viewHolder.time.setText(events.get(position).getDateTime());
+        // There seems to be an error when it reloads the saved positions for events
+        // and images are shifted and end up on the wrong event.
+        // Removing the images is kind of a hack
+        if (!events.get(position).hasImage())
+            viewHolder.image.setImageDrawable(null);
+
         if (events.get(position).hasImage()) {
             // Images should probably be references in firestore on the events objects
             // That was I wouldn't have to keep downloading them like this

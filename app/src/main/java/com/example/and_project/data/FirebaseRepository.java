@@ -34,6 +34,7 @@ public class FirebaseRepository {
     private static String UID = "uid";
     private static String EMAIL = "email";
     private static String NAME = "name";
+    private static String IS_PUBLIC = "isPublic";
 
     private static FirebaseRepository instance;
     private FirebaseAuth mAuth;
@@ -57,7 +58,8 @@ public class FirebaseRepository {
         /** Event list: Query sorting by date after today */
         eventsQuery = eventCollectionReference
                 .orderBy(ISO_DATE, Query.Direction.DESCENDING)
-                .whereGreaterThan(ISO_DATE, LocalDateTime.now().toString());
+                .whereGreaterThan(ISO_DATE, LocalDateTime.now().toString())
+                .whereEqualTo(IS_PUBLIC, true);
         eventListLiveData = new EventListLiveData(eventsQuery);
     }
 
@@ -121,7 +123,7 @@ public class FirebaseRepository {
         return new EventListLiveData(myEventsQuery);
     }
 
-    public Task<DocumentReference> addEvent(String title, String ISODate, String room, String description, boolean hasImage) {
+    public Task<DocumentReference> addEvent(String title, String ISODate, String room, String description, boolean hasImage, boolean isPublic) {
         Map<String, Object> docData = new HashMap<>();
         docData.put(ATTENDEES, new ArrayList<>());
         docData.put(TITLE, title);
@@ -130,6 +132,7 @@ public class FirebaseRepository {
         docData.put(DESCRIPTION, description);
         docData.put(ORGANIZER, mAuth.getCurrentUser().getUid());
         docData.put(HAS_IMAGE, hasImage);
+        docData.put(IS_PUBLIC, isPublic);
 
         return eventCollectionReference.add(docData);
     }
@@ -172,7 +175,7 @@ public class FirebaseRepository {
     }
 
     public Task<byte[]> getImage(String eventId) {
-        final long BYTE_ARRAY_LENGTH = 256 * 1024; // 256KB
+        final long BYTE_ARRAY_LENGTH = 512 * 1024; // 512KB
         return storageRef.child(eventId).getBytes(BYTE_ARRAY_LENGTH);
     }
 }
