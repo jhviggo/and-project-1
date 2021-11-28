@@ -17,9 +17,9 @@ The project has the following requirements.
 | Users can log in| M | Yes |
 | Users can CRUD events | M | Partly |
 | Users can see a list of public events | M | Yes |
-| Events can be private that have guest lists | S | No |
+| Events can be private that have guest lists | S | Partly |
 | Users can RSVP to events | S | Yes |
-| Events can have tags ie. talks, party, workshop | S | No |
+| Events can have tags ie. talks, party, workshop | S | Yes |
 | ~~Users can book rooms with VIA~~ | C | No |
 | App has a display mode to be shown on TV | C | No |
 | ~~App shows a map of the school~~ | W | No |

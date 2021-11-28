@@ -13,6 +13,8 @@ import android.widget.TextView;
 
 import com.example.and_project.data.Event;
 
+import java.util.stream.Collectors;
+
 public class EventInformationFragment extends Fragment {
     Event event;
     public EventInformationFragment(Event event) {
@@ -27,6 +29,7 @@ public class EventInformationFragment extends Fragment {
         TextView tvDate = (TextView) view.findViewById(R.id.eventInfoDate);
         TextView tvTime = (TextView) view.findViewById(R.id.eventInfoTime);
         TextView tvRoom = (TextView) view.findViewById(R.id.eventInfoRoom);
+        TextView tvTags = (TextView) view.findViewById(R.id.eventInfoTags);
         TextView tvDescription = (TextView) view.findViewById(R.id.eventInfoDescription);
 
         tvTitle.setText(event.getTitle());
@@ -35,6 +38,10 @@ public class EventInformationFragment extends Fragment {
         if (event.getRoom() != null && !event.getRoom().isEmpty()) {
             tvRoom.setText("Room: " + event.getRoom());
         }
+        String tagsString = "";
+        if (event.getTags().size() > 0)
+            tagsString = "Tags: " + event.getTags().stream().collect(Collectors.joining(", "));
+        tvTags.setText(tagsString);
         tvDescription.setText(event.getDescription());
         return view;
     }

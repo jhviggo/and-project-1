@@ -16,6 +16,7 @@ import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.util.Log;
 import android.view.View;
 import android.widget.DatePicker;
 import android.widget.ImageButton;
@@ -26,7 +27,11 @@ import android.widget.Toast;
 
 import com.example.and_project.data.FirebaseRepository;
 
+import java.lang.reflect.Array;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 public class CreateEventActivity extends AppCompatActivity {
     private static final int PICK_IMAGE = 1;
@@ -35,6 +40,7 @@ public class CreateEventActivity extends AppCompatActivity {
     ImageButton ibImage;
     TextView tvTitleError;
     TextView tvRoom;
+    TextView tvTags;
     DatePicker tvDate;
     TimePicker tvTime;
     TextView tvDescription;
@@ -51,6 +57,7 @@ public class CreateEventActivity extends AppCompatActivity {
         tvTitleError.setTextColor(Color.RED);
         ibImage = findViewById(R.id.eventImage);
         tvRoom = findViewById(R.id.eventRoom);
+        tvTags = findViewById(R.id.eventTags);
         tvDate = (DatePicker) findViewById(R.id.eventDate);
         tvTime = (TimePicker) findViewById(R.id.eventTime);
         tvDescription = findViewById(R.id.eventDescription);
@@ -72,6 +79,8 @@ public class CreateEventActivity extends AppCompatActivity {
         }
         String ISODate = LocalDateTime.of(tvDate.getYear(), tvDate.getMonth(), tvDate.getDayOfMonth(), tvTime.getHour(), tvTime.getMinute()).toString();
         Switch tbIsPublic = (Switch) findViewById(R.id.eventIsPublic);
+        List<String> tags = Arrays.asList(tvTags.getText().toString().split(","));
+        tags.replaceAll(String::trim);
         boolean hasImage = eventImage != null;
         repository.addEvent(
                 tvTitle.getText().toString(),
@@ -79,7 +88,8 @@ public class CreateEventActivity extends AppCompatActivity {
                 tvRoom.getText().toString(),
                 tvDescription.getText().toString(),
                 hasImage,
-                tbIsPublic.isChecked()
+                tbIsPublic.isChecked(),
+                tags
         ).addOnCompleteListener(task -> {
             if (task.isSuccessful()) {
                 if (eventImage != null) {

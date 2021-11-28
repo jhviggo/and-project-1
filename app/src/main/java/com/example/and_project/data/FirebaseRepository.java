@@ -22,30 +22,31 @@ import java.util.List;
 import java.util.Map;
 
 public class FirebaseRepository {
-    private static String COLLECTION_EVENTS = "events";
-    private static String COLLECTION_USERS = "users";
-    private static String ATTENDEES = "attendees";
-    private static String TITLE = "title";
-    private static String ISO_DATE = "isoDate";
-    private static String ROOM = "room";
-    private static String DESCRIPTION = "description";
-    private static String ORGANIZER = "organizer";
-    private static String HAS_IMAGE = "hasImage";
-    private static String UID = "uid";
-    private static String EMAIL = "email";
-    private static String NAME = "name";
-    private static String IS_PUBLIC = "isPublic";
+    private final static String COLLECTION_EVENTS = "events";
+    private final static String COLLECTION_USERS = "users";
+    private final static String ATTENDEES = "attendees";
+    private final static String TITLE = "title";
+    private final static String ISO_DATE = "isoDate";
+    private final static String ROOM = "room";
+    private final static String DESCRIPTION = "description";
+    private final static String ORGANIZER = "organizer";
+    private final static String HAS_IMAGE = "hasImage";
+    private final static String UID = "uid";
+    private final static String EMAIL = "email";
+    private final static String NAME = "name";
+    private final static String IS_PUBLIC = "isPublic";
+    private final static String TAGS = "tags";
 
     private static FirebaseRepository instance;
-    private FirebaseAuth mAuth;
-    private FirebaseFirestore database;
-    private FirebaseStorage storage;
+    private final FirebaseAuth mAuth;
+    private final FirebaseFirestore database;
+    private final FirebaseStorage storage;
     private final EventListLiveData eventListLiveData;
     private UserLiveData userLiveData;
-    private CollectionReference eventCollectionReference;
-    private CollectionReference userCollectionReference;
-    private StorageReference storageRef;
-    private Query eventsQuery;
+    private final CollectionReference eventCollectionReference;
+    private final CollectionReference userCollectionReference;
+    private final StorageReference storageRef;
+    private final Query eventsQuery;
 
     private FirebaseRepository() {
         mAuth = FirebaseAuth.getInstance();
@@ -123,7 +124,7 @@ public class FirebaseRepository {
         return new EventListLiveData(myEventsQuery);
     }
 
-    public Task<DocumentReference> addEvent(String title, String ISODate, String room, String description, boolean hasImage, boolean isPublic) {
+    public Task<DocumentReference> addEvent(String title, String ISODate, String room, String description, boolean hasImage, boolean isPublic, List<String> tags) {
         Map<String, Object> docData = new HashMap<>();
         docData.put(ATTENDEES, new ArrayList<>());
         docData.put(TITLE, title);
@@ -133,6 +134,7 @@ public class FirebaseRepository {
         docData.put(ORGANIZER, mAuth.getCurrentUser().getUid());
         docData.put(HAS_IMAGE, hasImage);
         docData.put(IS_PUBLIC, isPublic);
+        docData.put(TAGS, tags);
 
         return eventCollectionReference.add(docData);
     }
