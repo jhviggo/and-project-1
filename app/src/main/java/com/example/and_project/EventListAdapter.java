@@ -36,7 +36,7 @@ public class EventListAdapter extends RecyclerView.Adapter<EventListAdapter.View
 
     public void onBindViewHolder(@NonNull ViewHolder viewHolder, int position) {
         viewHolder.title.setText(events.get(position).getTitle());
-        viewHolder.time.setText(events.get(position).getDateTime());
+        viewHolder.time.setText(events.get(position).getDateTime().replace('T', '\n'));
         // There seems to be an error when it reloads the saved positions for events
         // and images are shifted and end up on the wrong event.
         // Removing the images is kind of a hack
@@ -50,7 +50,9 @@ public class EventListAdapter extends RecyclerView.Adapter<EventListAdapter.View
                 if (value.isSuccessful()) {
                     BitmapFactory.Options options = new BitmapFactory.Options();
                     Bitmap bitmap = BitmapFactory.decodeByteArray(value.getResult(), 0, value.getResult().length, options);
-                    viewHolder.image.setImageBitmap(bitmap);
+                    // Crops image to a rectangle from the top left
+                    Bitmap crop = Bitmap.createBitmap(bitmap, 0, 0, bitmap.getHeight(), bitmap.getHeight());
+                    viewHolder.image.setImageBitmap(crop);
                 }
             });
         }

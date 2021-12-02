@@ -44,6 +44,7 @@ public class MainActivity extends AppCompatActivity implements EventListAdapter.
         userLiveData = userViewModel.getUserLiveData();
         initNavigationDrawer();
         initRecycleView();
+        eventsViewModel.getEvents();
     }
 
     @Override

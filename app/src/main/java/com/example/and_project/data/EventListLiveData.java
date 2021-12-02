@@ -1,5 +1,7 @@
 package com.example.and_project.data;
 
+import android.util.Log;
+
 import androidx.lifecycle.LiveData;
 
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -12,6 +14,7 @@ import java.util.ArrayList;
 
 public class EventListLiveData extends LiveData<ArrayList<Event>> {
     private final EventListener<QuerySnapshot> listener = (value, error) -> {
+        Log.d("YUSH", "UPDATE " + value);
         if (value != null) {
             ArrayList<Event> newData = new ArrayList<>();
             for (DocumentSnapshot document : value.getDocuments()) {
