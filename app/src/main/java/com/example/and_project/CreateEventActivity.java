@@ -93,9 +93,12 @@ public class CreateEventActivity extends AppCompatActivity {
         ).addOnCompleteListener(task -> {
             if (task.isSuccessful()) {
                 if (eventImage != null) {
-                    repository.uploadImage(eventImage, task.getResult().getId());
+                    repository.uploadImage(eventImage, task.getResult().getId()).addOnCompleteListener(task1 -> {
+                        finish();
+                    });
+                } else {
+                    finish();
                 }
-                finish();
             } else {
                 Toast.makeText(this, "Unable to create event at this time", Toast.LENGTH_SHORT).show();
             }
@@ -132,6 +135,10 @@ public class CreateEventActivity extends AppCompatActivity {
             int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
             String picturePath = cursor.getString(columnIndex);
             Bitmap bitmap = BitmapFactory.decodeFile(picturePath);
+            // Errored out due to permissions or 'requestLegacyExternalStorage' -> https://developer.android.com/training/data-storage#scoped-storage
+            if (bitmap == null)
+                return;
+
             // Scale image to some kinda meaningful dimensions to save storage bandwidth
             Bitmap scaledBitmap = Bitmap.createScaledBitmap(bitmap, 1000, 400, false);
             eventImage = scaledBitmap;

@@ -30,6 +30,7 @@
                 android:maxHeight="225dp"
                 android:adjustViewBounds="true"
                 android:scaleType="fitCenter"
+                android:padding="0dp"
                 android:onClick="dispatchTakePictureIntent"
                 android:src="@drawable/selectimage" />
             <EditText

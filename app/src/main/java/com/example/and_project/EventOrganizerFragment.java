@@ -34,7 +34,7 @@ public class EventOrganizerFragment extends Fragment {
             if (value != null && value.getData() != null) {
                 tvOrganizerName.setText(value.getString("name"));
                 tvOrganizerEmail.setText(value.getString("email"));
-                tvOrganizerDescription.setText(value.getString("description"));
+                tvOrganizerDescription.setText(value.getString("description").replace("\\n", "\n"));
             }
         });
         return view;

@@ -13,6 +13,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 
 import java.io.ByteArrayOutputStream;
 import java.time.LocalDateTime;
@@ -59,8 +60,7 @@ public class FirebaseRepository {
         /** Event list: Query sorting by date after today */
         eventsQuery = eventCollectionReference
                 .orderBy(ISO_DATE, Query.Direction.DESCENDING)
-                .whereGreaterThan(ISO_DATE, LocalDateTime.now().toString())
-                .whereEqualTo(IS_PUBLIC, true);
+                .whereGreaterThan(ISO_DATE, LocalDateTime.now().toString());
         eventListLiveData = new EventListLiveData(eventsQuery);
     }
 
@@ -169,11 +169,11 @@ public class FirebaseRepository {
     }
 
     /* Storage */
-    public void uploadImage(Bitmap bitmap, String fileName) {
+    public UploadTask uploadImage(Bitmap bitmap, String fileName) {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
         byte[] data = baos.toByteArray();
-        storageRef.child(fileName).putBytes(data);
+        return storageRef.child(fileName).putBytes(data);
     }
 
     public Task<byte[]> getImage(String eventId) {
